@@ -1,0 +1,980 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spark Bridge Initiative · A Bridge Initiative</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* === BRAND COLOR PALETTE & DYNAMIC THEMING === */
+      :root {
+        /* Spark Brand Colors Derived from Logo */
+        --spark-blue: #1d4ed8;       /* Primary Vibrant Blue */
+        --spark-orange: #ea580c;     /* Dynamic Orange / Amber */
+        --spark-green: #16a34a;      /* Forest Green for Climate & Hope */
+        
+        /* Light Theme Defaults */
+        --bg-main: #f8fafc;
+        --bg-card: #ffffff;
+        --bg-alt: #f1f5f9;
+        --bg-header: rgba(255, 255, 255, 0.9);
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --border-color: rgba(30, 58, 138, 0.12);
+        --shadow: 0 20px 35px -10px rgba(15, 23, 42, 0.08);
+        --toggle-bg: #e2e8f0;
+      }
+
+      /* Dark Mode Palette */
+      body.dark-mode {
+        --bg-main: #0b0f19;
+        --bg-card: #1f2937;
+        --bg-alt: #111827;
+        --bg-header: rgba(17, 24, 39, 0.9);
+        --text-primary: #f3f4f6;
+        --text-secondary: #9ca3af;
+        --border-color: rgba(255, 255, 255, 0.1);
+        --shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
+        --toggle-bg: #374151;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Open Sans", sans-serif;
+        color: var(--text-primary);
+        background-color: var(--bg-main);
+        line-height: 1.6;
+        scroll-behavior: smooth;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      h1, h2, h3, h4 {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      /* === HEADER & NAVIGATION === */
+      header {
+        background: var(--bg-header);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        border-bottom: 1px solid var(--border-color);
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+      }
+
+      .header-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0.8rem 2rem;
+      }
+
+      .logo a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
+
+      .logo-img {
+        height: 52px;
+        width: auto;
+        max-width: 220px;
+        object-fit: contain;
+      }
+
+      .nav-menu ul {
+        display: flex;
+        list-style: none;
+        gap: 1.6rem;
+        align-items: center;
+      }
+
+      .nav-menu ul li a {
+        text-decoration: none;
+        color: var(--text-primary);
+        font-weight: 600;
+        font-size: 1rem;
+        border-bottom: 2px solid transparent;
+        transition: color 0.2s, border-bottom-color 0.2s;
+        padding-bottom: 4px;
+      }
+
+      .nav-menu ul li a:hover {
+        border-bottom-color: var(--spark-orange);
+        color: var(--spark-orange);
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      /* Dark Mode Toggle Button */
+      .theme-toggle-btn {
+        background: var(--toggle-bg);
+        border: none;
+        color: var(--text-primary);
+        padding: 0.5rem 0.8rem;
+        border-radius: 30px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease, transform 0.2s ease;
+      }
+
+      .theme-toggle-btn:hover {
+        transform: scale(1.08);
+      }
+
+      .btn-donate {
+        background: var(--spark-orange);
+        color: white !important;
+        padding: 0.65rem 1.6rem;
+        border-radius: 40px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        text-decoration: none;
+        box-shadow: 0 8px 18px -6px rgba(234, 88, 12, 0.5);
+        transition: all 0.2s;
+      }
+
+      .btn-donate:hover {
+        background: #c2410c;
+        transform: translateY(-2px);
+      }
+
+      .mobile-menu {
+        display: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: var(--text-primary);
+      }
+
+      /* === HERO SECTION === */
+      .hero {
+        position: relative;
+        overflow: hidden;
+        color: white;
+        padding: 6.5rem 2rem 5.5rem;
+        text-align: center;
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #172554 100%);
+        border-bottom-left-radius: 50px;
+        border-bottom-right-radius: 50px;
+      }
+
+      .hero-container {
+        position: relative;
+        z-index: 2;
+        max-width: 950px;
+        margin: 0 auto;
+      }
+
+      .hero-badge {
+        font-size: 0.85rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        background: rgba(234, 88, 12, 0.25);
+        color: #fed7aa;
+        display: inline-block;
+        padding: 0.4rem 1.4rem;
+        border-radius: 60px;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(234, 88, 12, 0.4);
+      }
+
+      .hero h1 {
+        font-size: clamp(2.2rem, 5vw, 4rem);
+        margin: 0 auto 1.5rem;
+        line-height: 1.2;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        color: #cbd5e1;
+        margin-bottom: 2.5rem;
+        line-height: 1.7;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 0.9rem 2.2rem;
+        border-radius: 60px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s;
+        cursor: pointer;
+      }
+
+      .btn-primary {
+        background: var(--spark-orange);
+        color: white;
+        box-shadow: 0 10px 20px -6px rgba(234, 88, 12, 0.5);
+      }
+
+      .btn-primary:hover {
+        background: #c2410c;
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: white;
+      }
+
+      /* === SECTION STYLING === */
+      .section-title {
+        font-size: 2.3rem;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+      }
+
+      .section-title.center {
+        text-align: center;
+      }
+
+      .why-badge {
+        background: var(--bg-alt);
+        color: var(--spark-blue);
+        border-radius: 60px;
+        padding: 0.35rem 1.4rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        font-size: 0.85rem;
+        display: inline-block;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        border: 1px solid var(--border-color);
+      }
+
+      /* About & Identity Section */
+      .about-section {
+        padding: 5.5rem 0;
+        background: var(--bg-card);
+        transition: background-color 0.3s ease;
+      }
+
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+      }
+
+      .vision-mission-cards {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .vm-card {
+        background: var(--bg-alt);
+        padding: 1.8rem;
+        border-radius: 20px;
+        border-left: 6px solid var(--spark-orange);
+        box-shadow: var(--shadow);
+        transition: background-color 0.3s ease;
+      }
+
+      .vm-card.green {
+        border-left-color: var(--spark-green);
+      }
+
+      .vm-card h3 {
+        color: var(--spark-blue);
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+      }
+
+      /* Impact Dashboard */
+      .impact-dashboard {
+        background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+        border-radius: 40px;
+        padding: 4rem 2rem;
+        color: white;
+        margin: 3rem 0;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2.5rem;
+        text-align: center;
+        margin-top: 2.5rem;
+      }
+
+      .dashboard-number {
+        font-size: 3.2rem;
+        font-weight: 800;
+        color: #fb923c;
+        margin-bottom: 0.3rem;
+      }
+
+      .dashboard-label {
+        font-size: 1.05rem;
+        color: #cbd5e1;
+        font-weight: 600;
+      }
+
+      /* Strategic Pillars Section */
+      .programs-section {
+        padding: 5.5rem 0;
+        background: var(--bg-alt);
+        transition: background-color 0.3s ease;
+      }
+
+      .program-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+
+      .program-card {
+        background: var(--bg-card);
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--border-color);
+      }
+
+      .program-card:hover {
+        transform: translateY(-6px);
+      }
+
+      .program-header-bar {
+        background: rgba(29, 78, 216, 0.12);
+        color: var(--spark-blue);
+        padding: 0.8rem 1.6rem;
+        font-weight: 700;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      .program-content {
+        padding: 1.8rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .program-content h3 {
+        color: var(--spark-blue);
+        font-size: 1.3rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .program-content p {
+        color: var(--text-secondary);
+        font-size: 0.98rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .program-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid var(--border-color);
+        padding-top: 1rem;
+        margin-top: auto;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--spark-orange);
+      }
+
+      /* === GALLERY SECTION (Future Projects) === */
+      .gallery-section {
+        padding: 5.5rem 0;
+        background: var(--bg-card);
+        transition: background-color 0.3s ease;
+      }
+
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2.5rem;
+      }
+
+      .gallery-card {
+        position: relative;
+        height: 270px;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        background: var(--bg-alt);
+      }
+
+      .gallery-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .gallery-card:hover img {
+        transform: scale(1.08);
+      }
+
+      .gallery-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(to top, rgba(11, 15, 25, 0.95) 0%, rgba(11, 15, 25, 0.4) 70%, transparent 100%);
+        padding: 2rem 1.5rem 1.2rem;
+        color: white;
+      }
+
+      .gallery-tag {
+        background: var(--spark-orange);
+        color: white;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 0.2rem 0.75rem;
+        border-radius: 20px;
+        display: inline-block;
+        margin-bottom: 0.4rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+
+      .gallery-overlay h4 {
+        font-size: 1.15rem;
+        margin-bottom: 0.3rem;
+      }
+
+      .gallery-overlay p {
+        font-size: 0.88rem;
+        color: #cbd5e1;
+      }
+
+      /* Partners Strip */
+      .partner-strip {
+        background: var(--bg-alt);
+        padding: 2.8rem 0;
+        border-top: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
+        transition: background-color 0.3s ease;
+      }
+
+      .partner-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 3rem;
+        font-weight: 700;
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+      }
+
+      /* Contact & Call To Action */
+      .contact-cta {
+        background: linear-gradient(135deg, var(--spark-orange) 0%, #c2410c 100%);
+        color: white;
+        text-align: center;
+        padding: 4.5rem 2rem;
+        border-radius: 36px;
+        margin: 4rem auto;
+        max-width: 1200px;
+      }
+
+      .contact-cta h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .contact-cta p {
+        font-size: 1.2rem;
+        max-width: 700px;
+        margin: 0 auto 2.2rem;
+        color: #ffedd5;
+      }
+
+      /* Footer */
+      footer {
+        background: #0b0f19;
+        color: #cbd5e1;
+        padding: 4.5rem 2rem 2.5rem;
+        border-top-left-radius: 40px;
+        border-top-right-radius: 40px;
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2.5rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .footer-col h4 {
+        color: #fb923c;
+        margin-bottom: 1.3rem;
+        font-size: 1.1rem;
+      }
+
+      .footer-col ul {
+        list-style: none;
+      }
+
+      .footer-col ul li {
+        margin-bottom: 0.7rem;
+      }
+
+      .footer-col ul li a {
+        color: #94a3b8;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .footer-col ul li a:hover {
+        color: white;
+      }
+
+      .footer-bottom {
+        text-align: center;
+        margin-top: 3.5rem;
+        border-top: 1px solid #1f2937;
+        padding-top: 2rem;
+        color: #64748b;
+        font-size: 0.95rem;
+      }
+
+      .current-year {
+        font-weight: 600;
+        color: #fb923c;
+      }
+
+      /* Mobile Navigation Media Query */
+      @media (max-width: 950px) {
+        .nav-menu ul {
+          display: none;
+          flex-direction: column;
+          background: var(--bg-card);
+          position: absolute;
+          top: 75px;
+          right: 2rem;
+          width: 270px;
+          border-radius: 20px;
+          padding: 1.8rem;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+          align-items: flex-start;
+          border: 1px solid var(--border-color);
+        }
+        .nav-menu ul.active {
+          display: flex;
+        }
+        .mobile-menu {
+          display: block;
+        }
+        .about-grid {
+          grid-template-columns: 1fr;
+          gap: 2.5rem;
+        }
+      }
+    </style>
+  <base target="_blank">
+</head>
+  <body>
+    <!-- Header & Navbar -->
+    <header>
+      <div class="header-container">
+        <!-- Logo Image Placeholder -->
+        <div class="logo">
+          <a href="index.html">
+            <img src="spark_logo.png" alt="Spark Initiative Logo" class="logo-img" onerror="this.onerror=null; this.src='https://placehold.co/220x60/1d4ed8/ffffff?text=SPARK+INITIATIVE';">
+          </a>
+        </div>
+
+        <!-- Cleaned Navbar without Dropdowns -->
+        <nav class="nav-menu">
+          <ul id="mainNav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#pillars">Strategic Pillars</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#impact">Impact</a></li>
+            <li><a href="#get-involved">Get Involved</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+
+        <div class="nav-actions">
+          <!-- Dark Mode Toggle Button -->
+          <button class="theme-toggle-btn" id="themeToggle" title="Toggle Dark/Light Mode">
+            🌙
+          </button>
+          <a href="#get-involved" class="btn-donate">Donate</a>
+          <div class="mobile-menu" id="mobileMenuBtn">☰</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-container">
+        <div class="hero-badge">Spark Bridge Initiative · A Bridge Initiative</div>
+        <h1>Empowering women, girls, youth & marginalized communities</h1>
+        <p>
+          Championing rights, inclusive governance, peace, social justice, and climate resilience for an inclusive society where every voice thrives.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="#about" class="btn btn-primary">Our Mission & Vision</a>
+          <a href="#pillars" class="btn btn-secondary">Explore Pillars</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Us & Organizational Identity -->
+    <section id="about" class="about-section">
+      <div class="container">
+        <div class="about-grid">
+          <div>
+            <span class="why-badge">About Us</span>
+            <h2 class="section-title">Spark Bridge Initiative</h2>
+            <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 1.2rem; line-height: 1.8;">
+              Spark Bridge Initiative is a legally registered women-led organization championing the rights and empowerment of women and girls, while advancing inclusive governance, peace and social justice, climate resilience and sustainable development for youth and marginalized communities.
+            </p>
+            <p style="color: var(--text-secondary); font-size: 1.02rem; line-height: 1.8;">
+              Spark Bridge Initiative achieves these through community empowerment, advocacy, civic participation, social accountability, peacebuilding, capacity building, strategic partnerships, evidence-based action and support for climate-resilient and sustainable livelihoods.
+            </p>
+          </div>
+          <div class="vision-mission-cards">
+            <div class="vm-card">
+              <h3>🌟 Vision</h3>
+              <p style="color: var(--text-secondary);">An inclusive, just, and peaceful society where every voice thrives.</p>
+            </div>
+            <div class="vm-card green">
+              <h3>🎯 Mission</h3>
+              <p style="color: var(--text-secondary);">To empower women and girls, youth and marginalized communities to claim their rights, influence governance, and build inclusive, peaceful and resilient communities.</p>
+            </div>
+            <div class="vm-card" style="border-left-color: var(--spark-blue);">
+              <h3>📈 Overall Strategic Objective</h3>
+              <p style="color: var(--text-secondary);">To strengthen the capacity of women and girls, youth and marginalized communities to claim their rights, influence governance and build inclusive, resilient, and peaceful communities.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Impact Dashboard / Strategic Metrics -->
+    <section id="impact" class="container">
+      <div class="impact-dashboard">
+        <span class="why-badge" style="background: rgba(255,255,255,0.15); color: #fed7aa; border: 1px solid rgba(254,215,170,0.3);">Our Reach</span>
+        <h2 class="section-title center" style="color: white; margin-top: 0.5rem;">Strengthening community capacities</h2>
+        <div class="dashboard-grid">
+          <div>
+            <div class="dashboard-number">1,500+</div>
+            <div class="dashboard-label">Women & Girls Reached</div>
+          </div>
+          <div>
+            <div class="dashboard-number">50+</div>
+            <div class="dashboard-label">Civic & Peace Dialogues</div>
+          </div>
+          <div>
+            <div class="dashboard-number">4</div>
+            <div class="dashboard-label">Core Strategic Pillars</div>
+          </div>
+          <div>
+            <div class="dashboard-number">100%</div>
+            <div class="dashboard-label">Grassroots Driven</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Strategic Pillars -->
+    <section id="pillars" class="programs-section">
+      <div class="container">
+        <span class="why-badge">Core Pillars</span>
+        <h2 class="section-title">Spark Bridge Initiative Pillars</h2>
+        <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 750px;">
+          Our strategic pillars address interconnected rights, governance, peace, and climate resilience challenges facing communities.
+        </p>
+
+        <div class="program-grid">
+          <!-- Pillar 1 -->
+          <div class="program-card">
+            <div class="program-header-bar">Pillar 1</div>
+            <div class="program-content">
+              <div>
+                <h3>Women & Girls' Rights and Empowerment</h3>
+                <p>To advance the rights, dignity, safety, leadership and empowerment of women and girls, particularly those experiencing discrimination, violence and exclusion.</p>
+              </div>
+              <div class="program-meta">
+                <span>🛡️ Rights & Safety</span>
+                <span>Grassroots Action</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar 2 -->
+          <div class="program-card">
+            <div class="program-header-bar" style="background: rgba(234, 88, 12, 0.12); color: var(--spark-orange);">Pillar 2</div>
+            <div class="program-content">
+              <div>
+                <h3>Inclusive Governance & Civic Participation</h3>
+                <p>To strengthen the meaningful participation of women, youth and marginalized communities in governance and decision-making while promoting transparency, accountability and responsive leadership.</p>
+              </div>
+              <div class="program-meta">
+                <span>🗳️ Civic Voice</span>
+                <span>Accountability</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar 3 -->
+          <div class="program-card">
+            <div class="program-header-bar" style="background: rgba(22, 163, 74, 0.12); color: var(--spark-green);">Pillar 3</div>
+            <div class="program-content">
+              <div>
+                <h3>Peace, Social Justice & Human Rights</h3>
+                <p>To promote peaceful, inclusive and just communities by advancing human rights, conflict prevention, access to justice and social cohesion.</p>
+              </div>
+              <div class="program-meta">
+                <span>🕊️ Conflict Prevention</span>
+                <span>Social Justice</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pillar 4 -->
+          <div class="program-card">
+            <div class="program-header-bar" style="background: rgba(3, 105, 161, 0.12); color: #0284c7;">Pillar 4</div>
+            <div class="program-content">
+              <div>
+                <h3>Climate Resilience & Sustainable Livelihoods</h3>
+                <p>To strengthen climate resilience and sustainable livelihoods among women, youth and marginalized communities.</p>
+              </div>
+              <div class="program-meta">
+                <span>🌱 Green Livelihoods</span>
+                <span>Resilience</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery Section (Exhibits Future Projects) -->
+    <section id="gallery" class="gallery-section">
+      <div class="container">
+        <span class="why-badge">Future Projects Gallery</span>
+        <h2 class="section-title">Exhibiting Future Initiatives</h2>
+        <p style="color: var(--text-secondary); font-size: 1.1rem; max-width: 800px;">
+          An upcoming exhibition of our field work, civic dialogues, youth resilience bootcamps, and climate adaptation projects.
+        </p>
+
+        <div class="gallery-grid">
+          <!-- Gallery Item 1 -->
+          <div class="gallery-card">
+            <img src="https://placehold.co/600x400/1d4ed8/ffffff?text=Women+Leadership+Exhibit" alt="Women Leadership Forum">
+            <div class="gallery-overlay">
+              <span class="gallery-tag">Pillar 1</span>
+              <h4>Women & Girls' Civic Forums</h4>
+              <p>Capacity building & leadership mentoring in rural communities.</p>
+            </div>
+          </div>
+
+          <!-- Gallery Item 2 -->
+          <div class="gallery-card">
+            <img src="https://placehold.co/600x400/ea580c/ffffff?text=Inclusive+Governance+Dialogue" alt="Inclusive Governance Dialogue">
+            <div class="gallery-overlay">
+              <span class="gallery-tag">Pillar 2</span>
+              <h4>Social Accountability Audits</h4>
+              <p>Youth & women tracking public resource allocations and governance.</p>
+            </div>
+          </div>
+
+          <!-- Gallery Item 3 -->
+          <div class="gallery-card">
+            <img src="https://placehold.co/600x400/16a34a/ffffff?text=Climate+Resilience+Hub" alt="Climate Resilience Hub">
+            <div class="gallery-overlay">
+              <span class="gallery-tag">Pillar 4</span>
+              <h4>Climate-Resilient Livelihoods Hub</h4>
+              <p>Supporting sustainable agricultural practices and green livelihoods.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Partner Strip -->
+    <section class="partner-strip">
+      <div class="container">
+        <div class="partner-grid">
+          <span>CIVIC PARTNERS</span>
+          <span>WOMEN COALITIONS</span>
+          <span>YOUTH NETWORKS</span>
+          <span>COMMUNITY LEADERS</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact & Call to Action -->
+    <div id="get-involved" class="container">
+      <section class="contact-cta">
+        <h2>Join Us in Building Resilient Communities</h2>
+        <p>
+          Collaborate with Spark Bridge Initiative to empower women, girls, and youth while promoting peace, social justice, and climate action.
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+          <a href="tel:+254722957953" class="btn" style="background: white; color: var(--spark-orange); font-weight: 700;">Call Us: +254 722 957 953</a>
+          <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contact">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h4>Spark Bridge Initiative</h4>
+          <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.6;">
+            A bridge initiative empowering women, girls, youth, and marginalized communities.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#pillars">Strategic Pillars</a></li>
+            <li><a href="#gallery">Future Gallery</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Core Pillars</h4>
+          <ul>
+            <li><a href="#pillars">Women & Girls' Rights</a></li>
+            <li><a href="#pillars">Inclusive Governance</a></li>
+            <li><a href="#pillars">Peace & Human Rights</a></li>
+            <li><a href="#pillars">Climate Resilience</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact Information</h4>
+          <ul>
+            <li style="color: #cbd5e1;">📞 Phone: +254 722 957 953</li>
+            <li style="color: #cbd5e1;">✉️ Email: info@sparkinitiative.org</li>
+            <li style="color: #cbd5e1;">📍 Kenya</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>
+          &copy; <span class="current-year" id="dynamicYear">2026</span> Spark Bridge Initiative. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Interactive JavaScript -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // 1. Dark Mode Toggle Logic
+        const themeToggleBtn = document.getElementById("themeToggle");
+        const body = document.body;
+
+        // Check stored theme preference or default to light
+        const currentTheme = localStorage.getItem("spark_theme");
+        if (currentTheme === "dark") {
+          body.classList.add("dark-mode");
+          themeToggleBtn.textContent = "☀️";
+        } else {
+          themeToggleBtn.textContent = "🌙";
+        }
+
+        themeToggleBtn.addEventListener("click", function () {
+          body.classList.toggle("dark-mode");
+          const isDark = body.classList.contains("dark-mode");
+          
+          themeToggleBtn.textContent = isDark ? "☀️" : "🌙";
+          localStorage.setItem("spark_theme", isDark ? "dark" : "light");
+        });
+
+        // 2. Mobile Menu Toggle
+        const mobileBtn = document.getElementById("mobileMenuBtn");
+        const navUl = document.querySelector("#mainNav");
+        
+        if (mobileBtn && navUl) {
+          mobileBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            navUl.classList.toggle("active");
+            mobileBtn.textContent = navUl.classList.contains("active") ? "✕" : "☰";
+          });
+
+          document.addEventListener("click", function (event) {
+            if (!navUl.contains(event.target) && !mobileBtn.contains(event.target)) {
+              navUl.classList.remove("active");
+              mobileBtn.textContent = "☰";
+            }
+          });
+        }
+
+        // 3. Dynamic Year
+        const yearSpan = document.getElementById("dynamicYear");
+        if (yearSpan) {
+          yearSpan.textContent = new Date().getFullYear();
+        }
+
+        // 4. Smooth Scroll for internal anchors
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+          anchor.addEventListener("click", function (e) {
+            const href = this.getAttribute("href");
+            if (href === "#" || href === "") return;
+            const target = document.querySelector(href);
+            if (target) {
+              e.preventDefault();
+              target.scrollIntoView({ behavior: "smooth", block: "start" });
+              if (navUl && navUl.classList.contains("active")) {
+                navUl.classList.remove("active");
+                if (mobileBtn) mobileBtn.textContent = "☰";
+              }
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
